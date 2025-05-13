@@ -5,5 +5,5 @@ public interface UserInterface {
     String getRole();
     String getName();
     String getEmail();
+    String getPassword();
 }
-

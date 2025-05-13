@@ -3,25 +3,16 @@ package com.example.UserMS.Factorypt;
 public class Instructor implements UserInterface {
     private String name;
     private String email;
+    private String password;
 
-    public Instructor(String name, String email) {
+    public Instructor(String name, String email, String password) {
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
-    @Override
-    public String getRole() {
-        return "instructor";
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getEmail() {
-        return email;
-    }
+    public String getRole() { return "instructor"; }
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public String getPassword() { return password; }
 }
-

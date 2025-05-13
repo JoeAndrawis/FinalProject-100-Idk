@@ -1,5 +1,7 @@
 package com.example.UserMS.Service;
 
+import com.example.UserMS.Factorypt.UserFactory;
+import com.example.UserMS.Factorypt.UserInterface;
 import com.example.UserMS.Repository.AdminRepository;
 import com.example.UserMS.Repository.InstructorRepository;
 import com.example.UserMS.Repository.StudentRepository;
@@ -26,12 +28,20 @@ public class UserServiceImpl implements UserService {
     public Object signUp(Object entity, String role) {
         switch (role.toLowerCase()) {
             case "student" -> {
+
+                StudentsEntity input = (StudentsEntity) entity;
+                UserInterface user = UserFactory.createUser("student", input.getName(), input.getEmail(), input.getPassword());
+
                 return studentRepository.save((StudentsEntity) entity);
             }
             case "admin" -> {
+                AdminsEntity input = (AdminsEntity) entity;
+                UserInterface user = UserFactory.createUser("admin", input.getName(), input.getEmail(), input.getPassword());
                 return adminRepository.save((AdminsEntity) entity);
             }
             case "instructor" -> {
+                InstructorsEntity input = (InstructorsEntity) entity;
+                UserInterface user = UserFactory.createUser("instructor", input.getName(), input.getEmail(), input.getPassword());
                 return instructorRepository.save((InstructorsEntity) entity);
             }
             default -> throw new IllegalArgumentException("Invalid role");
