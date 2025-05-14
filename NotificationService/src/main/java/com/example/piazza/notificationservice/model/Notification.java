@@ -88,5 +88,4 @@ public class Notification {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    // You can generate them with IntelliJ (Alt + Insert or Right click > Generate)
 }
