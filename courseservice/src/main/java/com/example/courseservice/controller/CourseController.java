@@ -99,7 +99,15 @@ public ResponseEntity<?> uploadMaterial(
     } catch (CourseNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
+}   
+@PutMapping("/{courseId}/instructor/{instructorId}")
+public ResponseEntity<Course> assignInstructor(
+        @PathVariable String courseId,
+        @PathVariable String instructorId) {
+    Course updatedCourse = courseService.assignInstructorToCourse(courseId, instructorId);
+    return ResponseEntity.ok(updatedCourse);
 }
+
 
     
 

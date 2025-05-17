@@ -4,7 +4,11 @@ import com.example.courseservice.exception.*;
 import com.example.courseservice.model.*;
 import com.example.courseservice.repository.*;
 
+import client.UserServiceClient;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
@@ -14,7 +18,14 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final MaterialRepository materialRepository;
-
+    private final UserServiceClient userServiceClient;
+     @Autowired
+    public CourseServiceImpl(CourseRepository courseRepository, 
+                            UserServiceClient userServiceClient,MaterialRepository materialRepository) {
+        this.courseRepository = courseRepository;
+        this.materialRepository = materialRepository;
+        this.userServiceClient = userServiceClient;
+    }
     @Override
     public Course createCourse(Course course) {
         if (courseRepository.existsByCode(course.getCode())) {
@@ -62,5 +73,22 @@ public class CourseServiceImpl implements CourseService {
     public Course getCourseById(String id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException(id));
+    }
+    @Override
+    public Course assignInstructorToCourse(String courseId, String instructorId) {
+        ResponseEntity<Boolean> existsResponse = userServiceClient.checkUserExists(instructorId);
+        ResponseEntity<Boolean> isInstructorResponse = userServiceClient.isUserInstructor(instructorId);
+        
+        if (!existsResponse.getBody() || !isInstructorResponse.getBody()) {
+            throw new IllegalArgumentException("User is not a valid instructor");
+        }
+        
+        return courseRepository.findById(courseId)
+                .map(course -> {
+                    course.getInstructorIds().add(instructorId); 
+                    course.setUpdatedAt(LocalDateTime.now());
+                    return courseRepository.save(course);
+                })
+                .orElseThrow();
     }
 }
