@@ -9,7 +9,9 @@ import com.example.courseservice.dto.CourseType;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Document(collection = "courses")
 @Data
@@ -39,7 +41,6 @@ public class Course {
     @Min(1)
     private int maxCapacity;
     private int currentEnrollment = 0;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

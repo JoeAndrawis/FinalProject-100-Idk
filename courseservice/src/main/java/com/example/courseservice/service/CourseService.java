@@ -8,4 +8,7 @@ public interface CourseService {
     Course uploadMaterial(String courseId, Material material);
     Course enrollStudent(String courseId, String studentId);
     Course getCourseById(String id);
+    Course assignInstructorToCourse(String courseId, String instructorId);
+
+    
 }
