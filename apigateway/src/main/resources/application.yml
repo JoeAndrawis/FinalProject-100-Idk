@@ -1,0 +1,24 @@
+server:
+  port: 8080
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: apigateway
+  cloud:
+    gateway:
+      routes:
+        - id: courseservice
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/courses/**
+         
+        - id: UserMS
+          uri: http://localhost:8082
+          predicates:
+            - Path=/users/**
+        - id: NotificationService
+          uri: http://localhost:8083
+          predicates:
+            - Path=/notifications/**
+         
