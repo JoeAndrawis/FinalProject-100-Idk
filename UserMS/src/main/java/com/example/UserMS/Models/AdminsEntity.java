@@ -1,5 +1,7 @@
 package com.example.UserMS.Models;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "admins")
@@ -8,19 +10,25 @@ public class AdminsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name must not be blank")
     private String name;
-    private String email;
-    private String password;
 
-    public AdminsEntity(String password, String email, String name) {
-        this.password = password;
-        this.email = email;
-        this.name = name;
-    }
+    @NotBlank(message = "Email must not be blank")
+    private String email;
+
+    @NotBlank(message = "Password must not be blank")
+    private String password;
 
     public AdminsEntity() {
     }
 
+    public AdminsEntity(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    // getters and setters
     public Long getId() {
         return id;
     }

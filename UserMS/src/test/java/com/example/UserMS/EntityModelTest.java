@@ -1,10 +1,10 @@
-
 package com.example.UserMS;
 
 import com.example.UserMS.Models.AdminsEntity;
 import com.example.UserMS.Models.InstructorsEntity;
 import com.example.UserMS.Models.StudentsEntity;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EntityModelTest {
@@ -33,8 +33,9 @@ public class EntityModelTest {
     @Test
     void testStudentIdSetterGetter() {
         StudentsEntity student = new StudentsEntity();
-        student.setId(42L);
-        assertEquals(42L, student.getId());
+        Long expectedId = 42L;
+        student.setId(expectedId);
+        assertEquals(expectedId, student.getId());
     }
 
     // InstructorsEntity tests
@@ -61,14 +62,15 @@ public class EntityModelTest {
     @Test
     void testInstructorIdSetterGetter() {
         InstructorsEntity instructor = new InstructorsEntity();
-        instructor.setId(5L);
-        assertEquals(5L, instructor.getId());
+        Long expectedId = 5L;
+        instructor.setId(expectedId);
+        assertEquals(expectedId, instructor.getId());
     }
 
     // AdminsEntity tests
     @Test
     void testAdminConstructorAndGetters() {
-        AdminsEntity admin = new AdminsEntity("adminpass", "admin@guc.edu.eg", "Admin");
+        AdminsEntity admin = new AdminsEntity("Admin", "admin@guc.edu.eg", "adminpass");
         assertEquals("Admin", admin.getName());
         assertEquals("admin@guc.edu.eg", admin.getEmail());
         assertEquals("adminpass", admin.getPassword());
@@ -89,11 +91,10 @@ public class EntityModelTest {
     @Test
     void testAdminIdSetterGetter() {
         AdminsEntity admin = new AdminsEntity();
-        admin.setId(1L);
-        assertEquals(1L, admin.getId());
+        Long expectedId = 1L;
+        admin.setId(expectedId);
+        assertEquals(expectedId, admin.getId());
     }
-
-
 
     @Test
     void testSetNullEmail() {

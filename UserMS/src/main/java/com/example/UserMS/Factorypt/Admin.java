@@ -1,7 +1,7 @@
-
 package com.example.UserMS.Factorypt;
 
 public class Admin implements UserInterface {
+    private Long id; // new
     private String name;
     private String email;
     private String password;
@@ -12,8 +12,33 @@ public class Admin implements UserInterface {
         this.password = password;
     }
 
-    public String getRole() { return "admin"; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
+    @Override
+    public String getRole() {
+        return "admin";
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -11,4 +11,8 @@ public interface UserService {
     Object findUserByName(String name);
     Object verifyUser(String email);
 
+    Object findUserById(Long id);
+    Object findStudentById(Long id);
+    Object findInstructorById(Long id);
+
 }

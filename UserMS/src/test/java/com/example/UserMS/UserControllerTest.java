@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,9 +40,11 @@ public class UserControllerTest {
 
     @Test
     void testSignUpStudent_Null() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             userController.signUpStudent(null);
         });
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        assertTrue(exception.getReason().contains("Student data cannot be null"));
     }
 
     @Test
@@ -58,11 +62,14 @@ public class UserControllerTest {
         assertEquals("Admin signed up", userController.signUpAdmin(admin).getBody());
     }
 
+
     @Test
     void testSignUpAdmin_Null() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             userController.signUpAdmin(null);
         });
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        assertTrue(exception.getReason().contains("Admin data cannot be null"));
     }
 
     @Test
@@ -80,11 +87,14 @@ public class UserControllerTest {
         assertEquals("Instructor signed up", userController.signUpInstructor(instructor).getBody());
     }
 
+
     @Test
     void testSignUpInstructor_Null() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             userController.signUpInstructor(null);
         });
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        assertTrue(exception.getReason().contains("Instructor data cannot be null"));
     }
 
     @Test
@@ -192,5 +202,44 @@ public class UserControllerTest {
         String email = "test@guc.edu.eg";
         when(userService.verifyUser(email)).thenReturn("Student exists: Test");
         assertEquals("Student exists: Test", userController.verifyUser(email).getBody());
+    }
+
+
+    @Test
+    void testGetStudentById_Found() {
+        Long id = 1L;
+        StudentsEntity student = new StudentsEntity("Moamen", "moamen@guc.edu.eg", "123", 3.5);
+        when(userService.findStudentById(id)).thenReturn(student);
+        assertEquals(student, userController.getStudentById(id).getBody());
+    }
+
+    @Test
+    void testGetStudentById_NotFound() {
+        Long id = 999L;
+        when(userService.findStudentById(id)).thenReturn(null);
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            userController.getStudentById(id);
+        });
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+    }
+
+
+
+    @Test
+    void testGetInstructorById_Found() {
+        Long id = 1L;
+        InstructorsEntity instructor = new InstructorsEntity("Karine", "karine@guc.edu.eg", "abc123");
+        when(userService.findInstructorById(id)).thenReturn(instructor);
+        assertEquals(instructor, userController.getInstructorById(id).getBody());
+    }
+
+    @Test
+    void testGetInstructorById_NotFound() {
+        Long id = 2L;
+        when(userService.findInstructorById(id)).thenReturn(null);
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            userController.getInstructorById(id);
+        });
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }

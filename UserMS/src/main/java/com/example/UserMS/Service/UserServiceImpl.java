@@ -28,21 +28,19 @@ public class UserServiceImpl implements UserService {
     public Object signUp(Object entity, String role) {
         switch (role.toLowerCase()) {
             case "student" -> {
-
                 StudentsEntity input = (StudentsEntity) entity;
-                UserInterface user = UserFactory.createUser("student", input.getName(), input.getEmail(), input.getPassword());
-
-                return studentRepository.save((StudentsEntity) entity);
+                UserInterface user = UserFactory.createUser("student", input.getName(), input.getEmail(), input.getPassword(), input.getGpa());
+                return studentRepository.save(input);
             }
             case "admin" -> {
                 AdminsEntity input = (AdminsEntity) entity;
                 UserInterface user = UserFactory.createUser("admin", input.getName(), input.getEmail(), input.getPassword());
-                return adminRepository.save((AdminsEntity) entity);
+                return adminRepository.save(input);
             }
             case "instructor" -> {
                 InstructorsEntity input = (InstructorsEntity) entity;
                 UserInterface user = UserFactory.createUser("instructor", input.getName(), input.getEmail(), input.getPassword());
-                return instructorRepository.save((InstructorsEntity) entity);
+                return instructorRepository.save(input);
             }
             default -> throw new IllegalArgumentException("Invalid role");
         }
@@ -80,6 +78,7 @@ public class UserServiceImpl implements UserService {
                 StudentsEntity toUpdate = existing.get();
                 toUpdate.setName(student.getName());
                 toUpdate.setPassword(student.getPassword());
+                toUpdate.setGpa(student.getGpa());
                 return studentRepository.save(toUpdate);
             }
         } else if (role.equalsIgnoreCase("admin") && entity instanceof AdminsEntity admin) {
@@ -102,7 +101,6 @@ public class UserServiceImpl implements UserService {
         return null; // user not found
     }
 
-
     @Override
     public void deleteUser(String email) {
         studentRepository.findByEmail(email).ifPresent(studentRepository::delete);
@@ -123,6 +121,7 @@ public class UserServiceImpl implements UserService {
 
         return null;
     }
+
     @Override
     public Object findUserByName(String name) {
         Optional<StudentsEntity> student = studentRepository.findByName(name);
@@ -136,6 +135,7 @@ public class UserServiceImpl implements UserService {
 
         return null;
     }
+
     @Override
     public Object verifyUser(String email) {
         Optional<StudentsEntity> student = studentRepository.findByEmail(email);
@@ -156,5 +156,27 @@ public class UserServiceImpl implements UserService {
         return "User not found!";
     }
 
+    @Override
+    public Object findUserById(Long id) {
+        Optional<StudentsEntity> student = studentRepository.findById(id);
+        if (student.isPresent()) return student.get();
 
+        Optional<AdminsEntity> admin = adminRepository.findById(id);
+        if (admin.isPresent()) return admin.get();
+
+        Optional<InstructorsEntity> instructor = instructorRepository.findById(id);
+        if (instructor.isPresent()) return instructor.get();
+
+        return null;
+    }
+
+    @Override
+    public Object findStudentById(Long id) {
+        return studentRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Object findInstructorById(Long id) {
+        return instructorRepository.findById(id).orElse(null);
+    }
 }
