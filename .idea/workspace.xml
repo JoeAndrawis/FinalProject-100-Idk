@@ -4,7 +4,46 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="24f2caf1-83dc-4b06-bb06-a99d07f301f2" name="Changes" comment="" />
+    <list default="true" id="24f2caf1-83dc-4b06-bb06-a99d07f301f2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserMS/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserMS/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserMS/src/main/resources/application-docker.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserMS/src/main/resources/application-local.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserMS/src/test/resources/application-test.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/src/main/java/com/example/UserMS/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/src/main/java/com/example/UserMS/Controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/src/test/java/com/example/UserMS/EntityModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/src/test/java/com/example/UserMS/EntityModelTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/src/test/java/com/example/UserMS/SessionManagerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/src/test/java/com/example/UserMS/UserControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/src/test/java/com/example/UserMS/UserControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/src/test/java/com/example/UserMS/UserMsApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Factorypt/Admin.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Factorypt/Admin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Factorypt/Instructor.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Factorypt/Instructor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Factorypt/Student.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Factorypt/Student.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Factorypt/UserFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Factorypt/UserFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Models/AdminsEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Models/AdminsEntity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Models/InstructorsEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Models/InstructorsEntity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Models/StudentsEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Models/StudentsEntity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Repository/AdminRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Repository/AdminRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Repository/InstructorRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Repository/InstructorRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Repository/StudentRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Repository/StudentRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Service/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/Service/UserServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/SessionManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/SessionManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/UserMsApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/classes/com/example/UserMS/UserMsApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/DatabaseConnectionTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/DatabaseConnectionTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/EntityModelTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/EntityModelTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/RepositoryTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/RepositoryTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/SessionManagerTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/UserControllerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/UserControllerTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/UserMsApplicationTests.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/UserServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/UserMS/target/test-classes/com/example/UserMS/UserServiceImplTest.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,21 +59,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "MoamenElzyat"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;MoamenElzyat&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/JoeAndrawis/FinalProject-100-Idk.git",
-    "accountId": "a44ee521-9b23-4156-9568-c6354b8390ef"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/JoeAndrawis/FinalProject-100-Idk.git&quot;,
+    &quot;accountId&quot;: &quot;a44ee521-9b23-4156-9568-c6354b8390ef&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2wv208qxvqux36qSzIQqSIBMvUV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -43,28 +82,40 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.UserMsApplication.executor": "Run",
+    "JUnit.DatabaseConnectionTest.executor": "Run",
+    "JUnit.DatabaseConnectionTest.testStudentTableExists.executor": "Run",
+    "JUnit.EntityModelTest.executor": "Run",
+    "JUnit.RepositoryTest.executor": "Run",
+    "JUnit.UserControllerTest.executor": "Run",
+    "JUnit.java in UserMS.executor": "Run",
     "Maven.UserMS [clean].executor": "Run",
     "Maven.UserMS [compile].executor": "Run",
     "Maven.UserMS [package].executor": "Run",
     "Maven.UserMS [validate].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "UserApp-Moamen",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "UserApp",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/UserMS/src/test" />
+      <recent name="$PROJECT_DIR$/UserMS/src/main/resources" />
+      <recent name="$PROJECT_DIR$/UserMS" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.UserMsApplication">
+  <component name="RunManager" selected="JUnit.UserMS in UserMS">
     <configuration name="UserMsApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.UserMS.UserMsApplication" />
       <module name="UserMS" />
@@ -74,6 +125,38 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DatabaseConnectionTest.testStudentTableExists" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="UserMS" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.UserMS.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.UserMS" />
+      <option name="MAIN_CLASS_NAME" value="com.example.UserMS.DatabaseConnectionTest" />
+      <option name="METHOD_NAME" value="testStudentTableExists" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserMS in UserMS" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="UserMS" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/UserMS/src/test/java/com/example/UserMS" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="java in UserMS" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="UserMS" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/UserMS/src/test/java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -88,15 +171,18 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.UserMS in UserMS" />
+        <item itemvalue="JUnit.java in UserMS" />
         <item itemvalue="Application.UserMsApplication" />
+        <item itemvalue="JUnit.DatabaseConnectionTest.testStudentTableExists" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
       </set>
     </attachedChunks>
   </component>
@@ -109,6 +195,14 @@
       <option name="presentableId" value="Default" />
       <updated>1746907502283</updated>
       <workItem from="1746907504911" duration="3326000" />
+      <workItem from="1747173733405" duration="109000" />
+      <workItem from="1747173845643" duration="105000" />
+      <workItem from="1747462912889" duration="125000" />
+      <workItem from="1747463657383" duration="1272000" />
+      <workItem from="1747464940618" duration="27000" />
+      <workItem from="1747464971187" duration="48000" />
+      <workItem from="1747465030880" duration="63000" />
+      <workItem from="1747465102352" duration="1262000" />
     </task>
     <servers />
   </component>

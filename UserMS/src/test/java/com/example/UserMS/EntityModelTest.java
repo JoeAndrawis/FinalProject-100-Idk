@@ -12,7 +12,7 @@ public class EntityModelTest {
     // StudentsEntity tests
     @Test
     void testStudentConstructorAndGetters() {
-        StudentsEntity student = new StudentsEntity("student@example.com", "Student Name", "password123");
+        StudentsEntity student = new StudentsEntity("Student Name", "student@example.com", "password123");
         assertEquals("Student Name", student.getName());
         assertEquals("student@example.com", student.getEmail());
         assertEquals("password123", student.getPassword());
@@ -40,7 +40,7 @@ public class EntityModelTest {
     // InstructorsEntity tests
     @Test
     void testInstructorConstructorAndGetters() {
-        InstructorsEntity instructor = new InstructorsEntity("instpass", "inst@guc.edu.eg", "Instructor");
+        InstructorsEntity instructor = new InstructorsEntity("Instructor", "inst@guc.edu.eg", "instpass");
         assertEquals("Instructor", instructor.getName());
         assertEquals("inst@guc.edu.eg", instructor.getEmail());
         assertEquals("instpass", instructor.getPassword());

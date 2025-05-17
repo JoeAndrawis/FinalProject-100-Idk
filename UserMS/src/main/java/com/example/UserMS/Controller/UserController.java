@@ -16,17 +16,20 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/signup/student")
-    public ResponseEntity<Object> signUpStudent(@RequestBody StudentsEntity student) {
+    public ResponseEntity<Object> signUpStudent(@RequestBody(required = false) StudentsEntity student) {
+        if (student == null) throw new IllegalArgumentException("Student data cannot be null");
         return ResponseEntity.ok(userService.signUp(student, "student"));
     }
 
     @PostMapping("/signup/admin")
-    public ResponseEntity<Object> signUpAdmin(@RequestBody AdminsEntity admin) {
+    public ResponseEntity<Object> signUpAdmin(@RequestBody(required = false) AdminsEntity admin) {
+        if (admin == null) throw new IllegalArgumentException("Admin data cannot be null");
         return ResponseEntity.ok(userService.signUp(admin, "admin"));
     }
 
     @PostMapping("/signup/instructor")
-    public ResponseEntity<Object> signUpInstructor(@RequestBody InstructorsEntity instructor) {
+    public ResponseEntity<Object> signUpInstructor(@RequestBody(required = false) InstructorsEntity instructor) {
+        if (instructor == null) throw new IllegalArgumentException("Instructor data cannot be null");
         return ResponseEntity.ok(userService.signUp(instructor, "instructor"));
     }
 

@@ -137,7 +137,7 @@ public class UserServiceImplTest {
 
     @Test
     void testVerifyUser_Found() {
-        StudentsEntity student = new StudentsEntity("pw", "exist@guc.edu.eg", "Karine");
+        StudentsEntity student = new StudentsEntity("Karine", "exist@guc.edu.eg", "pw");
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Optional.of(student));
         assertEquals("Student exists: Karine", userService.verifyUser(student.getEmail()));
     }

@@ -119,7 +119,7 @@ public class UserControllerTest {
     // logout
     @Test
     void testLogout() {
-        doNothing().when(userService).logout();
+        when(userService.logout()).thenReturn("Logged out successfully");
         assertEquals("Logged out successfully", userController.logout().getBody());
     }
 
@@ -168,21 +168,21 @@ public class UserControllerTest {
     @Test
     void testEditStudentProfile() {
         StudentsEntity student = new StudentsEntity("pass", "stud@guc.edu.eg", "Moamen");
-        doNothing().when(userService).updateProfile(student, "student");
+        when(userService.updateProfile(student, "student")).thenReturn(null);
         assertEquals("Student profile updated successfully!", userController.editStudentProfile(student).getBody());
     }
 
     @Test
     void testEditAdminProfile() {
         AdminsEntity admin = new AdminsEntity("pass", "admin@guc.edu.eg", "Admin");
-        doNothing().when(userService).updateProfile(admin, "admin");
+        when(userService.updateProfile(admin, "admin")).thenReturn(null);
         assertEquals("Admin profile updated successfully!", userController.editAdminProfile(admin).getBody());
     }
 
     @Test
     void testEditInstructorProfile() {
         InstructorsEntity instructor = new InstructorsEntity("pass", "inst@guc.edu.eg", "Instructor");
-        doNothing().when(userService).updateProfile(instructor, "instructor");
+        when(userService.updateProfile(instructor, "instructor")).thenReturn(null);
         assertEquals("Instructor profile updated successfully!", userController.editInstructorProfile(instructor).getBody());
     }
 
