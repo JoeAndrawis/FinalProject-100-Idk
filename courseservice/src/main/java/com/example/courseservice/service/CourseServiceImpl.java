@@ -8,6 +8,9 @@ import client.UserServiceClient;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -19,13 +22,16 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final MaterialRepository materialRepository;
     private final UserServiceClient userServiceClient;
-     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository, 
-                            UserServiceClient userServiceClient,MaterialRepository materialRepository) {
+
+    @Autowired
+    public CourseServiceImpl(CourseRepository courseRepository,
+            UserServiceClient userServiceClient, MaterialRepository materialRepository) {
         this.courseRepository = courseRepository;
         this.materialRepository = materialRepository;
         this.userServiceClient = userServiceClient;
     }
+
+    @CachePut(value = "courses", key = "#course.code")
     @Override
     public Course createCourse(Course course) {
         if (courseRepository.existsByCode(course.getCode())) {
@@ -36,30 +42,30 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.save(course);
     }
 
+    @CachePut(value = "courses", key = "#courseId")
     @Override
     public Course uploadMaterial(String courseId, Material material) {
         material.setCourseId(courseId);
-        
+
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException(courseId));
-        
+
         Material savedMaterial = materialRepository.save(material);
-        
+
         course.getMaterialIds().add(savedMaterial.getId());
         return courseRepository.save(course);
     }
 
-   
-
+    @CachePut(value = "courses", key = "#courseId")
     @Override
     public Course enrollStudent(String courseId, String studentId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException(courseId));
-        
+
         if (course.getCurrentEnrollment() >= course.getMaxCapacity()) {
             throw new CourseFullException("Course has reached maximum capacity");
         }
-        
+
         if (!course.getStudentIds().contains(studentId)) {
             course.getStudentIds().add(studentId);
             course.setCurrentEnrollment(course.getCurrentEnrollment() + 1);
@@ -69,23 +75,26 @@ public class CourseServiceImpl implements CourseService {
         return course;
     }
 
+    @Cacheable(value = "courses", key = "#id")
     @Override
     public Course getCourseById(String id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException(id));
     }
+
+    @CachePut(value = "courses", key = "#courseId")
     @Override
     public Course assignInstructorToCourse(String courseId, String instructorId) {
         ResponseEntity<Boolean> existsResponse = userServiceClient.checkUserExists(instructorId);
         ResponseEntity<Boolean> isInstructorResponse = userServiceClient.isUserInstructor(instructorId);
-        
+
         if (!existsResponse.getBody() || !isInstructorResponse.getBody()) {
             throw new IllegalArgumentException("User is not a valid instructor");
         }
-        
+
         return courseRepository.findById(courseId)
                 .map(course -> {
-                    course.getInstructorIds().add(instructorId); 
+                    course.getInstructorIds().add(instructorId);
                     course.setUpdatedAt(LocalDateTime.now());
                     return courseRepository.save(course);
                 })
