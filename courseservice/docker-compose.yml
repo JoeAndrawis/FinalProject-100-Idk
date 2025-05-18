@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  course-service:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/course_service
+    networks:
+      - course-network
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - course-network
+
+user:
+  service:
+    url: http://localhost:8081 
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+volumes:
+  mongo-data:
+
+networks:
+  course-network:
+    driver: bridge

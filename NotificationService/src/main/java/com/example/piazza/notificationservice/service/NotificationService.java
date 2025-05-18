@@ -20,7 +20,7 @@ public class NotificationService {
         return repo.findAll();
     }
 
-    public Optional<Notification> getById(Long id) {
+    public Optional<Notification> getById(String id) {
         return repo.findById(id);
     }
 
@@ -28,17 +28,17 @@ public class NotificationService {
         return repo.save(notification);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         repo.deleteById(id);
     }
 
-    public Notification markAsRead(Long id) {
+    public Notification markAsRead(String id) {
         Notification notif = repo.findById(id).orElseThrow();
         notif.setRead(true);
         return repo.save(notif);
     }
 
-    public Notification archive(Long id) {
+    public Notification archive(String id) {
         Notification notif = repo.findById(id).orElseThrow();
         notif.setArchived(true);
         return repo.save(notif);

@@ -1,14 +1,14 @@
 package com.example.piazza.notificationservice.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
-@Entity
+@Document(collection = "notifications")
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String userId;
     private String type;
@@ -23,7 +23,7 @@ public class Notification {
         this.archived = false;
     }
 
-    public Notification(String message, Long id, String userId, String type,  boolean archived, LocalDateTime timestamp) {
+    public Notification(String message, String id, String userId, String type,  boolean archived, LocalDateTime timestamp) {
         this.message = message;
         this.id = id;
         this.userId = userId;
@@ -56,16 +56,15 @@ public class Notification {
         return userId;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
-// Getters and Setters omitted for brevity
 
     public void setRead(boolean read) {
         this.read = read;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

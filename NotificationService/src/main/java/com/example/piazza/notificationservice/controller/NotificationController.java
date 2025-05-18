@@ -22,7 +22,7 @@ public class NotificationController {
     }
 
     @GetMapping("/{id}")
-    public Notification getById(@PathVariable Long id) {
+    public Notification getById(@PathVariable String id) {
         return service.getById(id).orElse(null);
     }
 
@@ -32,17 +32,17 @@ public class NotificationController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable String id) {
         service.delete(id);
     }
 
     @PutMapping("/{id}/read")
-    public Notification markAsRead(@PathVariable Long id) {
+    public Notification markAsRead(@PathVariable String id) {
         return service.markAsRead(id);
     }
 
     @PutMapping("/{id}/archive")
-    public Notification archive(@PathVariable Long id) {
+    public Notification archive(@PathVariable String id) {
         return service.archive(id);
     }
 

@@ -19,15 +19,22 @@ spec:
           image: userms:latest
           imagePullPolicy: Never
           ports:
-            - containerPort: 8082
+            - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
-            - name: SPRING_DATA_MONGODB_URI
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://postgres:5432/user_database"
+            - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: mongodb-secret
-                  key: uri
+                  name: postgres-secret
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
 ---
 apiVersion: v1
 kind: Service
@@ -38,5 +45,5 @@ spec:
     app: userms
   ports:
     - protocol: TCP
-      port: 8082
-      targetPort: 8082 
+      port: 8080
+      targetPort: 8080 

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: courseservice
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: courseservice
@@ -19,22 +19,38 @@ spec:
           image: courseservice:latest
           imagePullPolicy: Never
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"
-            - name: SPRING_DATASOURCE_URL
-              value: "jdbc:postgresql://postgres:5432/courses"
-            - name: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATA_MONGODB_URI
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
-                  key: username
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: password
+                  name: mongodb-secret
+                  key: uri
+            - name: USER_SERVICE_URL
+              value: "http://userms:8081"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 20
+            failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
@@ -45,5 +61,6 @@ spec:
     app: courseservice
   ports:
     - protocol: TCP
-      port: 8081
-      targetPort: 8081 
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP 
