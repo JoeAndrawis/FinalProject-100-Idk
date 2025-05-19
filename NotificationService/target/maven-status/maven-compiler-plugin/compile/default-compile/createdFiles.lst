@@ -1,0 +1,10 @@
+com\example\piazza\notificationservice\dto\NotificationRequest.class
+com\example\piazza\notificationservice\dto\UserEvent.class
+com\example\piazza\notificationservice\repository\NotificationRepository.class
+com\example\piazza\notificationservice\NotificationServiceApplication.class
+com\example\piazza\notificationservice\controller\NotificationController.class
+com\example\piazza\notificationservice\rabbitmq\UserEventListener.class
+com\example\piazza\notificationservice\service\NotificationService.class
+com\example\piazza\notificationservice\rabbitmq\RabbitMQConfig2.class
+com\example\piazza\notificationservice\rabbitmq\RabbitMQConfig.class
+com\example\piazza\notificationservice\model\Notification.class

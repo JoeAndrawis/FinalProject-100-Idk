@@ -10,6 +10,7 @@ import com.example.UserMS.Models.AdminsEntity;
 import com.example.UserMS.Models.InstructorsEntity;
 import com.example.UserMS.Models.StudentsEntity;
 import com.example.UserMS.rabbitmq.RabbitMQProducer;
+import com.example.UserMS.rabbitmq.UserEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,16 +34,20 @@ public class UserServiceImpl implements UserService {
             case "student" -> {
                 StudentsEntity input = (StudentsEntity) entity;
                 UserInterface user = UserFactory.createUser("student", input.getName(), input.getEmail(), input.getPassword(), input.getGpa());
+                rabbitMQProducer.sendUserEvent(new UserEvent("created", input.getName(), input.getEmail(),"student", input.getId()));
                 return studentRepository.save(input);
             }
             case "admin" -> {
                 AdminsEntity input = (AdminsEntity) entity;
                 UserInterface user = UserFactory.createUser("admin", input.getName(), input.getEmail(), input.getPassword());
+                rabbitMQProducer.sendUserEvent(new UserEvent("created", input.getName(), input.getEmail(),"admin", input.getId()));
+
                 return adminRepository.save(input);
             }
             case "instructor" -> {
                 InstructorsEntity input = (InstructorsEntity) entity;
                 UserInterface user = UserFactory.createUser("instructor", input.getName(), input.getEmail(), input.getPassword());
+                rabbitMQProducer.sendUserEvent(new UserEvent("created", input.getName(), input.getEmail(),"instructor", input.getId()));
                 return instructorRepository.save(input);
             }
             default -> throw new IllegalArgumentException("Invalid role");
@@ -57,6 +62,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.isPresent()) {
             SessionManager.getInstance().setToken("fake-token-for-" + email);
+
             return "Logged in. Token: " + SessionManager.getInstance().getToken();
         }
         return "User not found";
@@ -82,6 +88,8 @@ public class UserServiceImpl implements UserService {
                 toUpdate.setName(student.getName());
                 toUpdate.setPassword(student.getPassword());
                 toUpdate.setGpa(student.getGpa());
+                rabbitMQProducer.sendUserEvent(new UserEvent("updated", student.getName(), student.getEmail(),"student",student.getId()));
+
                 return studentRepository.save(toUpdate);
             }
         } else if (role.equalsIgnoreCase("admin") && entity instanceof AdminsEntity admin) {
@@ -90,6 +98,8 @@ public class UserServiceImpl implements UserService {
                 AdminsEntity toUpdate = existing.get();
                 toUpdate.setName(admin.getName());
                 toUpdate.setPassword(admin.getPassword());
+                rabbitMQProducer.sendUserEvent(new UserEvent("updated", admin.getName(), admin.getEmail(),"admin", admin.getId()));
+
                 return adminRepository.save(toUpdate);
             }
         } else if (role.equalsIgnoreCase("instructor") && entity instanceof InstructorsEntity instructor) {
@@ -98,6 +108,8 @@ public class UserServiceImpl implements UserService {
                 InstructorsEntity toUpdate = existing.get();
                 toUpdate.setName(instructor.getName());
                 toUpdate.setPassword(instructor.getPassword());
+                rabbitMQProducer.sendUserEvent(new UserEvent("updated", instructor.getName(), instructor.getEmail(),"instructor",instructor.getId()));
+
                 return instructorRepository.save(toUpdate);
             }
         }

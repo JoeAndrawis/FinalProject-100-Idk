@@ -23,6 +23,8 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      RABBITMQ_EXCHANGE: "shared_exchange"
+      RABBITMQ_ROUTINGKEY: "user.notify"
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_database
       SPRING_DATASOURCE_USERNAME: user_username
       SPRING_DATASOURCE_PASSWORD: user_password

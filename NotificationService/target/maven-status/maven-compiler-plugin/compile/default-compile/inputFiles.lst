@@ -1,0 +1,10 @@
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\controller\NotificationController.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\dto\NotificationRequest.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\dto\UserEvent.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\model\Notification.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\NotificationServiceApplication.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\rabbitmq\RabbitMQConfig.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\rabbitmq\RabbitMQConfig2.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\rabbitmq\UserEventListener.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\repository\NotificationRepository.java
+C:\Users\somaa\Documents\GitHub\FinalProject-100-Idk\NotificationService\src\main\java\com\example\piazza\notificationservice\service\NotificationService.java

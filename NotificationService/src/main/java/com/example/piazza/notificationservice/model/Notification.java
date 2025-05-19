@@ -52,7 +52,7 @@ public class Notification {
         return type;
     }
 
-    public String getUserId() {
+    public String getUserId(Long id) {
         return userId;
     }
 

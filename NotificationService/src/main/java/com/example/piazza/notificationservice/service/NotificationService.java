@@ -37,6 +37,7 @@ public class NotificationService {
     public Notification markAsRead(Long id) {
         Notification notif = repo.findById(id).orElseThrow();
         notif.setRead(true);
+
         return repo.save(notif);
     }
 

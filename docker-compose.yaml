@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Database for UserMS
+  postgres-user:
+    image: postgres
+    container_name: postgres-user-db
+    environment:
+      POSTGRES_DB: user_database
+      POSTGRES_USER: user_username
+      POSTGRES_PASSWORD: user_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-user-data:/var/lib/postgresql/data
+
+  # RabbitMQ (shared between services)
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  # User Microservice
+  userms:
+    build:
+      context: ./UserMS
+      dockerfile: Dockerfile
+    container_name: user-ms
+    depends_on:
+      - postgres-user
+      - rabbitmq
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/user_database
+      SPRING_DATASOURCE_USERNAME: user_username
+      SPRING_DATASOURCE_PASSWORD: user_password
+      SPRING_RABBITMQ_HOST: rabbitmq
+
+  # Notification Microservice
+  notificationservice:
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    container_name: notification-service
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+
+volumes:
+  postgres-user-data:
