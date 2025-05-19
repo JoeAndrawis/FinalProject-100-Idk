@@ -9,12 +9,12 @@ spring:
     gateway:
       routes:
         - id: courseservice
-          uri: http://localhost:8080
+          uri: http://localhost:8081
           predicates:
             - Path=/api/courses/**
          
         - id: UserMS
-          uri: http://localhost:8082
+          uri: http://localhost:8080
           predicates:
             - Path=/users/**
         - id: NotificationService
