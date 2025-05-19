@@ -1,5 +1,7 @@
 package com.example.UserMS.Service;
 
+import com.example.UserMS.Factorypt.UserFactory;
+import com.example.UserMS.Factorypt.UserInterface;
 import com.example.UserMS.Repository.AdminRepository;
 import com.example.UserMS.Repository.InstructorRepository;
 import com.example.UserMS.Repository.StudentRepository;
@@ -26,13 +28,19 @@ public class UserServiceImpl implements UserService {
     public Object signUp(Object entity, String role) {
         switch (role.toLowerCase()) {
             case "student" -> {
-                return studentRepository.save((StudentsEntity) entity);
+                StudentsEntity input = (StudentsEntity) entity;
+                UserInterface user = UserFactory.createUser("student", input.getName(), input.getEmail(), input.getPassword(), input.getGpa());
+                return studentRepository.save(input);
             }
             case "admin" -> {
-                return adminRepository.save((AdminsEntity) entity);
+                AdminsEntity input = (AdminsEntity) entity;
+                UserInterface user = UserFactory.createUser("admin", input.getName(), input.getEmail(), input.getPassword());
+                return adminRepository.save(input);
             }
             case "instructor" -> {
-                return instructorRepository.save((InstructorsEntity) entity);
+                InstructorsEntity input = (InstructorsEntity) entity;
+                UserInterface user = UserFactory.createUser("instructor", input.getName(), input.getEmail(), input.getPassword());
+                return instructorRepository.save(input);
             }
             default -> throw new IllegalArgumentException("Invalid role");
         }
@@ -70,6 +78,7 @@ public class UserServiceImpl implements UserService {
                 StudentsEntity toUpdate = existing.get();
                 toUpdate.setName(student.getName());
                 toUpdate.setPassword(student.getPassword());
+                toUpdate.setGpa(student.getGpa());
                 return studentRepository.save(toUpdate);
             }
         } else if (role.equalsIgnoreCase("admin") && entity instanceof AdminsEntity admin) {
@@ -92,7 +101,6 @@ public class UserServiceImpl implements UserService {
         return null; // user not found
     }
 
-
     @Override
     public void deleteUser(String email) {
         studentRepository.findByEmail(email).ifPresent(studentRepository::delete);
@@ -113,6 +121,7 @@ public class UserServiceImpl implements UserService {
 
         return null;
     }
+
     @Override
     public Object findUserByName(String name) {
         Optional<StudentsEntity> student = studentRepository.findByName(name);
@@ -126,6 +135,7 @@ public class UserServiceImpl implements UserService {
 
         return null;
     }
+
     @Override
     public Object verifyUser(String email) {
         Optional<StudentsEntity> student = studentRepository.findByEmail(email);
@@ -146,5 +156,27 @@ public class UserServiceImpl implements UserService {
         return "User not found!";
     }
 
+    @Override
+    public Object findUserById(Long id) {
+        Optional<StudentsEntity> student = studentRepository.findById(id);
+        if (student.isPresent()) return student.get();
 
+        Optional<AdminsEntity> admin = adminRepository.findById(id);
+        if (admin.isPresent()) return admin.get();
+
+        Optional<InstructorsEntity> instructor = instructorRepository.findById(id);
+        if (instructor.isPresent()) return instructor.get();
+
+        return null;
+    }
+
+    @Override
+    public Object findStudentById(Long id) {
+        return studentRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Object findInstructorById(Long id) {
+        return instructorRepository.findById(id).orElse(null);
+    }
 }

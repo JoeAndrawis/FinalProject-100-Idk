@@ -1,0 +1,5 @@
+com/example/UserMS/UserServiceImplTest.class
+com/example/UserMS/RepositoryTest.class
+com/example/UserMS/DatabaseConnectionTest.class
+com/example/UserMS/EntityModelTest.class
+com/example/UserMS/UserControllerTest.class
