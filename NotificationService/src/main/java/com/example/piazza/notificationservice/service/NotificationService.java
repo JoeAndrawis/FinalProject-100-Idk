@@ -1,7 +1,9 @@
 package com.example.piazza.notificationservice.service;
 
 import com.example.piazza.notificationservice.model.Notification;
+import com.example.piazza.notificationservice.rabbitmq.RabbitMQConfig2;
 import com.example.piazza.notificationservice.repository.NotificationRepository;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +37,7 @@ public class NotificationService {
     public Notification markAsRead(Long id) {
         Notification notif = repo.findById(id).orElseThrow();
         notif.setRead(true);
+
         return repo.save(notif);
     }
 
@@ -47,4 +50,5 @@ public class NotificationService {
     public List<Notification> filter(String userId, String type, Boolean read) {
         return repo.findByUserIdAndTypeAndRead(userId, type, read);
     }
+
 }

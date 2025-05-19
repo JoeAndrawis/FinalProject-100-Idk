@@ -9,12 +9,33 @@
         <module name="UserMS" />
         <module name="NotificationService" />
       </profile>
+      <profile name="Annotation profile for Final_Project" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="QuestionMS" />
+      </profile>
+      <profile name="Annotation profile for course-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
+        </processorPath>
+        <module name="course-service" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="UserMS" options="-parameters" />
       <module name="NotificationService" options="-parameters" />
+      <module name="QuestionMS" options="-parameters" />
+      <module name="UserMS" options="-parameters" />
+      <module name="course-service" options="-parameters" />
     </option>
   </component>
 </project>

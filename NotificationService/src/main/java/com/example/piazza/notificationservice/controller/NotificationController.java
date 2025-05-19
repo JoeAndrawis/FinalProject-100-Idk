@@ -16,7 +16,7 @@ public class NotificationController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<Notification> getAll() {
         return service.getAll();
     }
@@ -26,7 +26,7 @@ public class NotificationController {
         return service.getById(id).orElse(null);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Notification create(@RequestBody Notification notification) {
         return service.create(notification);
     }

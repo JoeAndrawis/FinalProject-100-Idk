@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # Database for UserMS
+  postgres-user:
+    image: postgres
+    container_name: postgres-user-db
+    environment:
+      POSTGRES_DB: user_database
+      POSTGRES_USER: user_username
+      POSTGRES_PASSWORD: user_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-user-data:/var/lib/postgresql/data
+
+  # RabbitMQ (shared between services)
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  # MongoDB for QuestionMS
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: questiondb
+    ports:
+      - "27017:27017"
+
+  # Mongo Express UI (optional)
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "9000:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/questiondb?authSource=admin
+      ME_CONFIG_BASICAUTH: false
+
+  # User Microservice
+  userms:
+    build:
+      context: ./UserMS
+      dockerfile: Dockerfile
+    container_name: user-ms
+    depends_on:
+      - postgres-user
+      - rabbitmq
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/user_database
+      SPRING_DATASOURCE_USERNAME: user_username
+      SPRING_DATASOURCE_PASSWORD: user_password
+      SPRING_RABBITMQ_HOST: rabbitmq
+
+  # Notification Microservice
+  notificationservice:
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    container_name: notification-service
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+
+  # Question Microservice
+  questionms:
+    build:
+      context: ./QuestionMS
+      dockerfile: Dockerfile
+    container_name: question-service
+    depends_on:
+      - mongo
+      - rabbitmq
+    ports:
+      - "8081:8080"
+    environment:
+      spring.data.mongodb.uri: mongodb://root:example@mongo:27017/questiondb?authSource=admin
+      spring.data.mongodb.database: questiondb
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+
+volumes:
+  postgres-user-data:
