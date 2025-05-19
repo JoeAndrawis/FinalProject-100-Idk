@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CourseWithInstructorDetails {
     private Course course;
-    private UserDto instructor;
+    private InstructorDto instructor;
 }

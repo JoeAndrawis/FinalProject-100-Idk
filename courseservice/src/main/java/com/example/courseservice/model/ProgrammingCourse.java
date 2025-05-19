@@ -13,7 +13,7 @@ public class ProgrammingCourse extends Course {
     private String difficultyLevel;
 
     public ProgrammingCourse() {
-        super(); // Call parent constructor
-        super.type = CourseType.PROGRAMMING; // Now accessible
+        super(); 
+        super.type = CourseType.PROGRAMMING; 
     }
 }

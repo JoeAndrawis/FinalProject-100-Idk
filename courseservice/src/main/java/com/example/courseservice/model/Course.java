@@ -6,12 +6,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.example.courseservice.dto.CourseType;
 
+import client.InstructorDto;
+import client.StudentDto;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Set;
 
 @Document(collection = "courses")
 @Data
@@ -34,11 +35,13 @@ public class Course {
     private int creditHours;
 
     private List<String> materialIds = new ArrayList<>();
-    private List<String> instructorIds = new ArrayList<>();
+    private List<InstructorDto> instructors = new ArrayList<>();
+    private List<Long> instructorIds = new ArrayList<>();
     private List<String> studentIds = new ArrayList<>();
     protected CourseType type; 
-    
-    @Min(1)
+    private List<StudentDto> students = new ArrayList<>();
+
+    @Min(1) @Max(3)
     private int maxCapacity;
     private int currentEnrollment = 0;
     private LocalDateTime createdAt;
