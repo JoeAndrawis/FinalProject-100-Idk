@@ -57,4 +57,50 @@ spring:
               args:
                 cache-name: notification-cache
                 time-to-live: 3600
+
+# Logging 
+logging:
+  level:
+    root: INFO
+    com.example.apigateway: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] [${spring.application.name},%X{traceId},%X{spanId}] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/apigateway.log
+    max-size: 10MB
+    max-history: 10
+
+# Actuator 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus,info,loggers
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+
+# Tracing 
+spring:
+  sleuth:
+    sampler:
+      probability: 1.0
+    web:
+      skipPattern: (^cleanup.*|.+favicon.*)
          
