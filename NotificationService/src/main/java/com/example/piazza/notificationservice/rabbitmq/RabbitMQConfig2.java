@@ -1,37 +1,37 @@
 package com.example.piazza.notificationservice.rabbitmq;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 
 @Configuration
 public class RabbitMQConfig2 {
 
-    public static final String NOTIFYPOSTING_QUEUE = "notifyPosting_queue";
-    public static final String EXCHANGE = "shared_exchange";
-    public static final String NOTIFYPOSTING_ROUTING_KEY = "notifyPosting_routing_key";
+    public static final String EXCHANGE = "question-events-exchange";  // Same as QuestionMS
+    public static final String QUEUE = "notifyPosting_queue";          // Same queue name
+    public static final String ROUTING_KEY = "notifyPosting_routing_key"; // Same routing key
 
-    @Bean
-    public Queue queue() {
-        return new Queue(NOTIFYPOSTING_QUEUE);
+    @Bean(name = "notifyPostingQueue")
+    public Queue notifyPostingQueue() {
+        return QueueBuilder.durable(QUEUE).build();
+    }
+
+    @Bean(name = "notifyPostingExchange")
+    public Exchange notifyPostingExchange() {
+        return ExchangeBuilder.topicExchange(EXCHANGE).durable(true).build();
     }
 
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(EXCHANGE);
+    public Binding notifyPostingBinding(@Qualifier("notifyPostingQueue") Queue queue,
+                                        @Qualifier("notifyPostingExchange") Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY).noargs();
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder
-                .bind(queue)
-                .to(exchange)
-                .with(NOTIFYPOSTING_ROUTING_KEY);
+    public MessageConverter jsonMessageConverter2() {
+        return new Jackson2JsonMessageConverter();
     }
-
 }

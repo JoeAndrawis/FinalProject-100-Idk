@@ -12,11 +12,10 @@ public class RabbitMQProducer2 {
 
     public void sendToNotifyPosting(String message) {
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig2.EXCHANGE,
-                RabbitMQConfig2.NOTIFYPOSTING_ROUTING_KEY,
+                RabbitMQConfig3.EXCHANGE,
+                RabbitMQConfig3.CREATED_KEY,  // or UPDATED_KEY, DELETED_KEY, ANSWER_KEY as needed
                 message
         );
         System.out.println("Post Notification Queue: " + message);
     }
 }
-

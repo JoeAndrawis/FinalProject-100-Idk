@@ -51,13 +51,11 @@ public class RabbitMQConfig {
                 .with(NOTIFY_ROUTING_KEY);
     }
 
-    // JSON Message converter bean
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
-    // RabbitTemplate configured with JSON message converter
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);

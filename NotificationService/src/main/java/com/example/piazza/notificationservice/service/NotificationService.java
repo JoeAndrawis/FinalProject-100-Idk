@@ -51,8 +51,4 @@ public class NotificationService {
         return repo.findByUserIdAndTypeAndRead(userId, type, read);
     }
 
-    @RabbitListener(queues = RabbitMQConfig2.NOTIFYPOSTING_QUEUE)
-    public void notifyShipping(String id) {
-        System.out.println("Recived question with ID " + id);
-    }
 }

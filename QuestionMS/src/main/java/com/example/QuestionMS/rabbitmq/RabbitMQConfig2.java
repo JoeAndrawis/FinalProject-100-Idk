@@ -18,20 +18,20 @@ public class RabbitMQConfig2 {
     public static final String NOTIFYPOSTING_ROUTING_KEY = "notifyPosting_routing_key";
 
     @Bean
-    public Queue queue() {
+    public Queue NotifyPostingQueue() {
         return new Queue(NOTIFYPOSTING_QUEUE);
     }
 
     @Bean
-    public TopicExchange exchange() {
+    public TopicExchange NotifyPostingExchange() {
         return new TopicExchange(EXCHANGE);
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
+    public Binding NotifyPostingBean(Queue NotifyPostingQueue, TopicExchange NotifyPostingExchange) {
         return BindingBuilder
-                .bind(queue)
-                .to(exchange)
+                .bind(NotifyPostingQueue)
+                .to(NotifyPostingExchange)
                 .with(NOTIFYPOSTING_ROUTING_KEY);
     }
 

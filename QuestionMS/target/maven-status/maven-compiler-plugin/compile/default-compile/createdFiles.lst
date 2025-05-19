@@ -1,6 +1,11 @@
-com\example\Final_Project\repositories\QuestionRepository.class
-com\example\Final_Project\models\Answer.class
-com\example\Final_Project\controllers\QuestionController.class
-com\example\Final_Project\FinalProjectApplication.class
-com\example\Final_Project\models\Question.class
-com\example\Final_Project\services\QuestionService.class
+com\example\QuestionMS\rabbitmq\RabbitMQConfig3.class
+com\example\QuestionMS\models\Question.class
+com\example\QuestionMS\rabbitmq\RabbitMQConfig.class
+com\example\QuestionMS\services\QuestionService.class
+com\example\QuestionMS\rabbitmq\RabbitMQProducer2.class
+com\example\QuestionMS\DTO\QuestionEvent.class
+com\example\QuestionMS\models\Answer.class
+com\example\QuestionMS\rabbitmq\RabbitMQConfig2.class
+com\example\QuestionMS\controllers\QuestionController.class
+com\example\QuestionMS\FinalProjectApplication.class
+com\example\QuestionMS\repositories\QuestionRepository.class

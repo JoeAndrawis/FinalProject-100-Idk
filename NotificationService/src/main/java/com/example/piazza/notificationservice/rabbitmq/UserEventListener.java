@@ -34,7 +34,6 @@ public class UserEventListener {
                 message = "Unknown event: " + event.getAction();
         }
 
-        // Save notification to DB
         Notification notification = new Notification();
         notification.getUserId(event.getId());
         notification.setMessage(message);
