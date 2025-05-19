@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.UserMS.UserControllerTest
--------------------------------------------------------------------------------
-Tests run: 26, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.399 s -- in com.example.UserMS.UserControllerTest
