@@ -137,8 +137,10 @@ public class UserControllerTest {
     @Test
     void testDeleteUser_Success() {
         String email = "delete@guc.edu.eg";
-        doNothing().when(userService).deleteUser(email);
-        assertEquals("User deleted", userController.deleteUser(email).getBody());
+        when(userService.deleteUser(email)).thenReturn(true);
+
+        ResponseEntity<String> response = userController.deleteUser(email);
+        assertEquals("User deleted", response.getBody());
     }
 
     // searchByEmail
@@ -177,25 +179,30 @@ public class UserControllerTest {
     // editProfile
     @Test
     void testEditStudentProfile() {
-        StudentsEntity student = new StudentsEntity("pass", "stud@guc.edu.eg", "Moamen");
-        when(userService.updateProfile(student, "student")).thenReturn(null);
-        assertEquals("Student profile updated successfully!", userController.editStudentProfile(student).getBody());
+        StudentsEntity student = new StudentsEntity("Moamen", "stud@guc.edu.eg", "pass", 3.5);
+        when(userService.updateProfile(student, "student")).thenReturn("No changes made.");
+
+        ResponseEntity<String> response = userController.editStudentProfile(student);
+        assertEquals("Student profile updated:\nNo changes made.", response.getBody());
     }
 
     @Test
     void testEditAdminProfile() {
-        AdminsEntity admin = new AdminsEntity("pass", "admin@guc.edu.eg", "Admin");
-        when(userService.updateProfile(admin, "admin")).thenReturn(null);
-        assertEquals("Admin profile updated successfully!", userController.editAdminProfile(admin).getBody());
+        AdminsEntity admin = new AdminsEntity("pass", "admin@guc.edu.eg", "OldName");
+        when(userService.updateProfile(admin, "admin")).thenReturn("Name: OldName → NewName");
+
+        ResponseEntity<String> response = userController.editAdminProfile(admin);
+        assertEquals("Admin profile updated:\nName: OldName → NewName", response.getBody());
     }
 
     @Test
     void testEditInstructorProfile() {
         InstructorsEntity instructor = new InstructorsEntity("pass", "inst@guc.edu.eg", "Instructor");
-        when(userService.updateProfile(instructor, "instructor")).thenReturn(null);
-        assertEquals("Instructor profile updated successfully!", userController.editInstructorProfile(instructor).getBody());
-    }
+        when(userService.updateProfile(instructor, "instructor")).thenReturn("Password: ******** → *********");
 
+        ResponseEntity<String> response = userController.editInstructorProfile(instructor);
+        assertEquals("Instructor profile updated:\nPassword: ******** → *********", response.getBody());
+    }
     // verify
     @Test
     void testVerifyUser_Exist() {

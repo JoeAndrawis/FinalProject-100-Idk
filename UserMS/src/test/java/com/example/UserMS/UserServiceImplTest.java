@@ -45,17 +45,33 @@ public class UserServiceImplTest {
 
     @Test
     void testUpdateStudentProfile_Found() {
-        StudentsEntity student = new StudentsEntity("pass", "stud@guc.edu.eg", "Mido");
-        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Optional.of(student));
-        when(studentRepository.save(student)).thenReturn(student);
-        assertEquals(student, userService.updateProfile(student, "student"));
+        // Existing student in repo
+        StudentsEntity existing = new StudentsEntity("OldName", "stud@guc.edu.eg", "oldpass", 2.0);
+        // Updated student input
+        StudentsEntity input = new StudentsEntity("NewName", "stud@guc.edu.eg", "newpass", 3.7);
+
+        when(studentRepository.findByEmail("stud@guc.edu.eg")).thenReturn(Optional.of(existing));
+        when(studentRepository.save(any(StudentsEntity.class))).thenAnswer(i -> i.getArgument(0));
+
+        String result = userService.updateProfile(input, "student").toString();
+
+        System.out.println("Update result:\n" + result);
+
+        assertTrue(result.contains("Name: OldName → NewName"));
+        assertTrue(result.contains("Password: ******** → *********"));
+        assertTrue(result.contains("GPA: 2.0 → 3.7"));
     }
 
     @Test
     void testUpdateStudentProfile_NotFound() {
         StudentsEntity student = new StudentsEntity("pass", "none@guc.edu.eg", "Nada");
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Optional.empty());
-        assertNull(userService.updateProfile(student, "student"));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.updateProfile(student, "student");
+        });
+
+        assertEquals("Student with this email does not exist.", exception.getMessage());
     }
 
     // ---------- Admin Tests ----------
@@ -67,18 +83,15 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testUpdateAdminProfile_Found() {
-        AdminsEntity admin = new AdminsEntity("4321", "admin@guc.edu.eg", "Admin" );
-        when(adminRepository.findByEmail(admin.getEmail())).thenReturn(Optional.of(admin));
-        when(adminRepository.save(admin)).thenReturn(admin);
-        assertEquals(admin, userService.updateProfile(admin, "admin"));
-    }
-
-    @Test
     void testUpdateAdminProfile_NotFound() {
-        AdminsEntity admin = new AdminsEntity("4321", "ghost@guc.edu.eg", "Ghost" );
+        AdminsEntity admin = new AdminsEntity("4321", "ghost@guc.edu.eg", "Ghost");
         when(adminRepository.findByEmail(admin.getEmail())).thenReturn(Optional.empty());
-        assertNull(userService.updateProfile(admin, "admin"));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.updateProfile(admin, "admin");
+        });
+
+        assertEquals("Admin with this email does not exist.", exception.getMessage());
     }
 
     // ---------- Instructor Tests ----------
@@ -90,18 +103,15 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testUpdateInstructorProfile_Found() {
-        InstructorsEntity instructor = new InstructorsEntity("pass", "inst@guc.edu.eg", "Instruct" );
-        when(instructorRepository.findByEmail(instructor.getEmail())).thenReturn(Optional.of(instructor));
-        when(instructorRepository.save(instructor)).thenReturn(instructor);
-        assertEquals(instructor, userService.updateProfile(instructor, "instructor"));
-    }
-
-    @Test
     void testUpdateInstructorProfile_NotFound() {
         InstructorsEntity instructor = new InstructorsEntity("pass", "missing@guc.edu.eg", "Ghost" );
         when(instructorRepository.findByEmail(instructor.getEmail())).thenReturn(Optional.empty());
-        assertNull(userService.updateProfile(instructor, "instructor"));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.updateProfile(instructor, "instructor");
+        });
+
+        assertEquals("Instructor with this email does not exist.", exception.getMessage());
     }
 
     // ---------- General Tests ----------
