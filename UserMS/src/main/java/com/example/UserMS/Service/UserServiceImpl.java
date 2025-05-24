@@ -9,18 +9,14 @@ import com.example.UserMS.SessionManager;
 import com.example.UserMS.Models.AdminsEntity;
 import com.example.UserMS.Models.InstructorsEntity;
 import com.example.UserMS.Models.StudentsEntity;
-import com.example.UserMS.rabbitmq.RabbitMQProducer;
-import com.example.UserMS.rabbitmq.UserEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private RabbitMQProducer rabbitMQProducer;
+
     @Autowired
     StudentRepository studentRepository;
     @Autowired
@@ -34,20 +30,16 @@ public class UserServiceImpl implements UserService {
             case "student" -> {
                 StudentsEntity input = (StudentsEntity) entity;
                 UserInterface user = UserFactory.createUser("student", input.getName(), input.getEmail(), input.getPassword(), input.getGpa());
-                rabbitMQProducer.sendUserEvent(new UserEvent("created", input.getName(), input.getEmail(),"student", input.getId()));
                 return studentRepository.save(input);
             }
             case "admin" -> {
                 AdminsEntity input = (AdminsEntity) entity;
                 UserInterface user = UserFactory.createUser("admin", input.getName(), input.getEmail(), input.getPassword());
-                rabbitMQProducer.sendUserEvent(new UserEvent("created", input.getName(), input.getEmail(),"admin", input.getId()));
-
                 return adminRepository.save(input);
             }
             case "instructor" -> {
                 InstructorsEntity input = (InstructorsEntity) entity;
                 UserInterface user = UserFactory.createUser("instructor", input.getName(), input.getEmail(), input.getPassword());
-                rabbitMQProducer.sendUserEvent(new UserEvent("created", input.getName(), input.getEmail(),"instructor", input.getId()));
                 return instructorRepository.save(input);
             }
             default -> throw new IllegalArgumentException("Invalid role");
@@ -55,16 +47,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(String email) {
-        Optional<? extends Object> user = studentRepository.findByEmail(email);
-        if (user.isEmpty()) user = adminRepository.findByEmail(email);
-        if (user.isEmpty()) user = instructorRepository.findByEmail(email);
-
-        if (user.isPresent()) {
-            SessionManager.getInstance().setToken("fake-token-for-" + email);
-
-            return "Logged in. Token: " + SessionManager.getInstance().getToken();
+    public String login(String email, String password) {
+        Optional<StudentsEntity> student = studentRepository.findByEmail(email);
+        if (student.isPresent()) {
+            if (student.get().getPassword().equals(password)) {
+                SessionManager.getInstance().setToken("fake-token-for-" + email);
+                return "Logged in. Token: " + SessionManager.getInstance().getToken();
+            } else {
+                return "Incorrect password";
+            }
         }
+
+        Optional<AdminsEntity> admin = adminRepository.findByEmail(email);
+        if (admin.isPresent()) {
+            if (admin.get().getPassword().equals(password)) {
+                SessionManager.getInstance().setToken("fake-token-for-" + email);
+                return "Logged in. Token: " + SessionManager.getInstance().getToken();
+            } else {
+                return "Incorrect password";
+            }
+        }
+
+        Optional<InstructorsEntity> instructor = instructorRepository.findByEmail(email);
+        if (instructor.isPresent()) {
+            if (instructor.get().getPassword().equals(password)) {
+                SessionManager.getInstance().setToken("fake-token-for-" + email);
+                return "Logged in. Token: " + SessionManager.getInstance().getToken();
+            } else {
+                return "Incorrect password";
+            }
+        }
+
         return "User not found";
     }
 
@@ -80,47 +93,100 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object updateProfile(Object entity, String role) {
+    public String updateProfile(Object entity, String role) {
+        StringBuilder changes = new StringBuilder();
+
         if (role.equalsIgnoreCase("student") && entity instanceof StudentsEntity student) {
             Optional<StudentsEntity> existing = studentRepository.findByEmail(student.getEmail());
-            if (existing.isPresent()) {
-                StudentsEntity toUpdate = existing.get();
+            if (existing.isEmpty()) throw new IllegalArgumentException("Student with this email does not exist.");
+
+            StudentsEntity toUpdate = existing.get();
+
+            if (!toUpdate.getName().equals(student.getName())) {
+                changes.append("Name: ").append(toUpdate.getName()).append(" → ").append(student.getName()).append("\n");
                 toUpdate.setName(student.getName());
+            }
+
+            if (!toUpdate.getPassword().equals(student.getPassword())) {
+                changes.append("Password: ******** → *********\n");
                 toUpdate.setPassword(student.getPassword());
+            }
+
+            if (Double.compare(toUpdate.getGpa(), student.getGpa()) != 0) {
+                changes.append("GPA: ").append(toUpdate.getGpa()).append(" → ").append(student.getGpa()).append("\n");
                 toUpdate.setGpa(student.getGpa());
-                rabbitMQProducer.sendUserEvent(new UserEvent("updated", student.getName(), student.getEmail(),"student",student.getId()));
-
-                return studentRepository.save(toUpdate);
             }
-        } else if (role.equalsIgnoreCase("admin") && entity instanceof AdminsEntity admin) {
-            Optional<AdminsEntity> existing = adminRepository.findByEmail(admin.getEmail());
-            if (existing.isPresent()) {
-                AdminsEntity toUpdate = existing.get();
-                toUpdate.setName(admin.getName());
-                toUpdate.setPassword(admin.getPassword());
-                rabbitMQProducer.sendUserEvent(new UserEvent("updated", admin.getName(), admin.getEmail(),"admin", admin.getId()));
 
-                return adminRepository.save(toUpdate);
-            }
-        } else if (role.equalsIgnoreCase("instructor") && entity instanceof InstructorsEntity instructor) {
-            Optional<InstructorsEntity> existing = instructorRepository.findByEmail(instructor.getEmail());
-            if (existing.isPresent()) {
-                InstructorsEntity toUpdate = existing.get();
-                toUpdate.setName(instructor.getName());
-                toUpdate.setPassword(instructor.getPassword());
-                rabbitMQProducer.sendUserEvent(new UserEvent("updated", instructor.getName(), instructor.getEmail(),"instructor",instructor.getId()));
-
-                return instructorRepository.save(toUpdate);
-            }
+            studentRepository.save(toUpdate);
+            return changes.length() > 0 ? changes.toString().trim() : "No changes made.";
         }
-        return null; // user not found
+
+        else if (role.equalsIgnoreCase("admin") && entity instanceof AdminsEntity admin) {
+            Optional<AdminsEntity> existing = adminRepository.findByEmail(admin.getEmail());
+            if (existing.isEmpty()) throw new IllegalArgumentException("Admin with this email does not exist.");
+
+            AdminsEntity toUpdate = existing.get();
+
+            if (!toUpdate.getName().equals(admin.getName())) {
+                changes.append("Name: ").append(toUpdate.getName()).append(" → ").append(admin.getName()).append("\n");
+                toUpdate.setName(admin.getName());
+            }
+
+            if (!toUpdate.getPassword().equals(admin.getPassword())) {
+                changes.append("Password: ******** → *********\n");
+                toUpdate.setPassword(admin.getPassword());
+            }
+
+            adminRepository.save(toUpdate);
+            return changes.length() > 0 ? changes.toString().trim() : "No changes made.";
+        }
+
+        else if (role.equalsIgnoreCase("instructor") && entity instanceof InstructorsEntity instructor) {
+            Optional<InstructorsEntity> existing = instructorRepository.findByEmail(instructor.getEmail());
+            if (existing.isEmpty()) throw new IllegalArgumentException("Instructor with this email does not exist.");
+
+            InstructorsEntity toUpdate = existing.get();
+
+            if (!toUpdate.getName().equals(instructor.getName())) {
+                changes.append("Name: ").append(toUpdate.getName()).append(" → ").append(instructor.getName()).append("\n");
+                toUpdate.setName(instructor.getName());
+            }
+
+            if (!toUpdate.getPassword().equals(instructor.getPassword())) {
+                changes.append("Password: ******** → *********\n");
+                toUpdate.setPassword(instructor.getPassword());
+            }
+
+            instructorRepository.save(toUpdate);
+            return changes.length() > 0 ? changes.toString().trim() : "No changes made.";
+        }
+
+        throw new IllegalArgumentException("Invalid role or entity.");
     }
 
     @Override
-    public void deleteUser(String email) {
-        studentRepository.findByEmail(email).ifPresent(studentRepository::delete);
-        adminRepository.findByEmail(email).ifPresent(adminRepository::delete);
-        instructorRepository.findByEmail(email).ifPresent(instructorRepository::delete);
+    public boolean deleteUser(String email) {
+        boolean deleted = false;
+
+        Optional<StudentsEntity> student = studentRepository.findByEmail(email);
+        if (student.isPresent()) {
+            studentRepository.delete(student.get());
+            deleted = true;
+        }
+
+        Optional<AdminsEntity> admin = adminRepository.findByEmail(email);
+        if (admin.isPresent()) {
+            adminRepository.delete(admin.get());
+            deleted = true;
+        }
+
+        Optional<InstructorsEntity> instructor = instructorRepository.findByEmail(email);
+        if (instructor.isPresent()) {
+            instructorRepository.delete(instructor.get());
+            deleted = true;
+        }
+
+        return deleted;
     }
 
     @Override
@@ -194,12 +260,4 @@ public class UserServiceImpl implements UserService {
     public Object findInstructorById(Long id) {
         return instructorRepository.findById(id).orElse(null);
     }
-
-
-    public String createPost(Long id){
-        String postId = UUID.randomUUID().toString();
-        this.rabbitMQProducer.sendToPosting(postId);
-        return id + "created a post with a queue ID: " + postId;
-    }
-
 }

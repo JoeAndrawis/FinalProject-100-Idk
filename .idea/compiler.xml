@@ -31,6 +31,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="UserMS" options="-parameters" />
       <module name="NotificationService" options="-parameters" />
       <module name="QuestionMS" options="-parameters" />
       <module name="UserMS" options="-parameters" />

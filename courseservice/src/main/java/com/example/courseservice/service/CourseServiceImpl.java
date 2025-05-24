@@ -3,14 +3,20 @@ package com.example.courseservice.service;
 import com.example.courseservice.exception.*;
 import com.example.courseservice.model.*;
 import com.example.courseservice.repository.*;
-
+import Stratagy.RegistrationContext; 
+import client.InstructorDto;
+import client.StudentDto;
 import client.UserServiceClient;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -51,44 +57,54 @@ public class CourseServiceImpl implements CourseService {
 
    
 
-    @Override
-    public Course enrollStudent(String courseId, String studentId) {
+    @Transactional
+    public Course assignStudentToCourse(String courseId, StudentDto studentDto) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException(courseId));
-        
-        if (course.getCurrentEnrollment() >= course.getMaxCapacity()) {
-            throw new CourseFullException("Course has reached maximum capacity");
+    
+        RegistrationContext context = new RegistrationContext();
+    
+        if (!context.registerStudent(studentDto, course)) {
+            throw new IllegalStateException("Student does not meet registration criteria");
         }
-        
-        if (!course.getStudentIds().contains(studentId)) {
-            course.getStudentIds().add(studentId);
+    
+        String studentIdStr = String.valueOf(studentDto.getId());
+    
+        if (!course.getStudentIds().contains(studentIdStr)) {
+            course.getStudentIds().add(studentIdStr);
             course.setCurrentEnrollment(course.getCurrentEnrollment() + 1);
             course.setUpdatedAt(LocalDateTime.now());
-            return courseRepository.save(course);
+            course = courseRepository.save(course);
         }
+    
         return course;
     }
+        
+
 
     @Override
     public Course getCourseById(String id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException(id));
     }
-    @Override
-    public Course assignInstructorToCourse(String courseId, String instructorId) {
-        ResponseEntity<Boolean> existsResponse = userServiceClient.checkUserExists(instructorId);
-        ResponseEntity<Boolean> isInstructorResponse = userServiceClient.isUserInstructor(instructorId);
-        
-        if (!existsResponse.getBody() || !isInstructorResponse.getBody()) {
-            throw new IllegalArgumentException("User is not a valid instructor");
+    
+    @Transactional
+    public Course assignInstructor(String courseId, InstructorDto instructorDto) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId));
+    
+        InstructorDto newInstructor = new InstructorDto(instructorDto.getId(), instructorDto.getName());
+    
+        if (!course.getInstructors().contains(newInstructor)) {
+            course.getInstructors().add(newInstructor);
+            course.setUpdatedAt(LocalDateTime.now());
+            course = courseRepository.save(course);
         }
-        
-        return courseRepository.findById(courseId)
-                .map(course -> {
-                    course.getInstructorIds().add(instructorId); 
-                    course.setUpdatedAt(LocalDateTime.now());
-                    return courseRepository.save(course);
-                })
-                .orElseThrow();
+    
+        return course;
     }
+    
 }
+
+
+    

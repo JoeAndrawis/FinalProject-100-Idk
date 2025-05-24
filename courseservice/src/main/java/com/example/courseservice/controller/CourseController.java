@@ -5,6 +5,11 @@ import com.example.courseservice.exception.CourseNotFoundException;
 import com.example.courseservice.factory.CourseFactory;
 import com.example.courseservice.model.*;
 import com.example.courseservice.service.CourseService;
+
+import client.InstructorDto;
+import client.StudentDto;
+import client.UserServiceClient;
+import feign.FeignException;
 import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
@@ -100,29 +105,65 @@ public ResponseEntity<?> uploadMaterial(
         return ResponseEntity.notFound().build();
     }
 }   
-@PutMapping("/{courseId}/instructor/{instructorId}")
-public ResponseEntity<Course> assignInstructor(
-        @PathVariable String courseId,
-        @PathVariable String instructorId) {
-    Course updatedCourse = courseService.assignInstructorToCourse(courseId, instructorId);
-    return ResponseEntity.ok(updatedCourse);
-}
-
 
     
-
-    @PostMapping("/{courseId}/students/{studentId}")
-    public ResponseEntity<Course> enrollStudent(
-            @PathVariable String courseId,
-            @PathVariable String studentId) {
-        
-        Course updatedCourse = courseService.enrollStudent(courseId, studentId);
-        return ResponseEntity.ok(updatedCourse);
-    }
 
     @GetMapping("/{courseId}")
     public ResponseEntity<Course> getCourse(@PathVariable String courseId) {
         Course course = courseService.getCourseById(courseId);
         return ResponseEntity.ok(course);
     }
+    @Autowired
+private UserServiceClient userServiceClient; 
+
+@PostMapping("/{courseId}/instructors/{instructorId}")
+public ResponseEntity<?> assignInstructorToCourse(
+        @PathVariable String courseId,
+        @PathVariable Long instructorId) {
+    try {
+        InstructorDto instructor = userServiceClient.getInstructorDetails(instructorId);
+
+        Course updatedCourse = courseService.assignInstructor(courseId, instructor);
+
+        return ResponseEntity.ok(updatedCourse);
+
+    } catch (FeignException.NotFound e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "Instructor not found"));
+    } catch (CourseNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError()
+                .body(Map.of("error", "Failed to assign instructor"));
+    }
+}
+
+@PostMapping("/{courseId}/students/{studentId}")
+public ResponseEntity<?> enrollStudent(
+        @PathVariable String courseId,
+        @PathVariable Long studentId) {
+    try {
+        StudentDto student = userServiceClient.getStudentDetails(studentId);
+
+        Course updatedCourse = courseService.assignStudentToCourse(courseId, student);
+
+        return ResponseEntity.ok(updatedCourse);
+
+    } catch (FeignException.NotFound e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "Student not found"));
+    } catch (CourseNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    } catch (IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError()
+                .body(Map.of("error", "Failed to enroll student"));
+    }
+}
+
+
+
+    
 }

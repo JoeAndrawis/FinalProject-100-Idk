@@ -40,8 +40,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email) {
-        return ResponseEntity.ok(userService.login(email));
+    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
+        return ResponseEntity.ok(userService.login(email, password));
     }
 
     @PostMapping("/logout")
@@ -67,26 +67,42 @@ public class UserController {
 
     @PutMapping("/editProfile/student")
     public ResponseEntity<String> editStudentProfile(@Valid @RequestBody StudentsEntity student) {
-        userService.updateProfile(student, "student");
-        return ResponseEntity.ok("Student profile updated successfully!");
+        try {
+            String changes = userService.updateProfile(student, "student").toString();
+            return ResponseEntity.ok("Student profile updated:\n" + changes);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PutMapping("/editProfile/admin")
     public ResponseEntity<String> editAdminProfile(@Valid @RequestBody AdminsEntity admin) {
-        userService.updateProfile(admin, "admin");
-        return ResponseEntity.ok("Admin profile updated successfully!");
+        try {
+            String changes = userService.updateProfile(admin, "admin").toString();
+            return ResponseEntity.ok("Admin profile updated:\n" + changes);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PutMapping("/editProfile/instructor")
     public ResponseEntity<String> editInstructorProfile(@Valid @RequestBody InstructorsEntity instructor) {
-        userService.updateProfile(instructor, "instructor");
-        return ResponseEntity.ok("Instructor profile updated successfully!");
+        try {
+            String changes = userService.updateProfile(instructor, "instructor").toString();
+            return ResponseEntity.ok("Instructor profile updated:\n" + changes);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestParam String email) {
-        userService.deleteUser(email);
-        return ResponseEntity.ok("User deleted");
+        boolean deleted = userService.deleteUser(email);
+        if (deleted) {
+            return ResponseEntity.ok("User deleted");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with email " + email + " not found");
+        }
     }
 
     @GetMapping("/verify")
@@ -109,9 +125,4 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Instructor not found");
         return ResponseEntity.ok(instructor);
     }
-    @GetMapping("/order/{id}")
-    public String createOrder(@PathVariable Long id) {
-        return this.userService.createPost(id);
-    }
-
 }

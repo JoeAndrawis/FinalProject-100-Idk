@@ -3,12 +3,15 @@ package com.example.courseservice.service;
 import com.example.courseservice.model.Course;
 import com.example.courseservice.model.Material;
 
+import client.InstructorDto;
+import client.StudentDto;
+
 public interface CourseService {
     Course createCourse(Course course);
     Course uploadMaterial(String courseId, Material material);
-    Course enrollStudent(String courseId, String studentId);
+    Course assignStudentToCourse(String courseId, StudentDto studentDto);
     Course getCourseById(String id);
-    Course assignInstructorToCourse(String courseId, String instructorId);
-
+    Course assignInstructor(String courseId, InstructorDto instructorDto);
     
+
 }
