@@ -2,11 +2,11 @@ package com.example.UserMS.Service;
 
 public interface UserService {
     Object signUp(Object entity, String role);
-    String login(String email);
+    String login(String email, String password);
     String logout();
     Object viewProfile(String email);
     Object updateProfile(Object entity, String role);
-    void deleteUser(String email);
+    boolean deleteUser(String email);
     Object findUserByEmail(String email);
     Object findUserByName(String name);
     Object verifyUser(String email);
